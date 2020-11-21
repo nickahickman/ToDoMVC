@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewData["Title"] = "ViewTasks";
+}
+
+@model List<Tasks>
+<h1>ViewTasks</h1>
+
+<table class="table">
+    <tr>
+        <th>Description</th>
+        <th>Due Date</th>
+        <th>Is Complete</th>
+        <th>Actions</th>
+    </tr>
+    @foreach (Tasks t in Model)
+    {
+        <tr>
+            <td>@t.Description</td>
+            <td>@t.DueDate</td>
+            <td>@t.IsComplete</td>
+            <td>
+                <form asp-action="DeleteTask" asp-route-Id="@t.Id"><input class="btn-danger" type="submit" value="Delete Task" /></form>
+                @if (t.IsComplete == false)
+                {
+                    <form asp-action="MarkComplete" asp-route-id="@t.Id">
+                        <input class="btn-success" type="submit" value="Mark Complete" />
+                    </form>
+                }
+                else { 
+                    <form asp-action="MarkComplete" asp-route-id="@t.Id">
+                        <input class="btn-primary" type="submit" value="Mark Incomplete" />
+                    </form>
+                }
+
+            </td>
+        </tr>
+    }
+</table>
+
+<form action="AddTask" method="post">
+    <input type="text" name="Description" value="" />
+    <input type="date" name="DueDate" />
+    <input type="hidden" name="IsComplete" value="false" />
+    <input type="hidden" name="OwnerId" value="@ViewBag.UserKey" />
+    <input type="submit" value="Add Task" />
+</form>
