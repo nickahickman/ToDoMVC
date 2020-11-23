@@ -20,7 +20,7 @@ namespace ToDoMVC.Controllers
         }
         public IActionResult ViewTasks(string sortByDate)
         {
-            string userKey = User.FindFirst(ClaimTypes.NameIdentifier).Value.ToString();
+            string userKey = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             List<Tasks> tasks = _context.Tasks.Where(x => x.OwnerId == userKey).ToList();
             ViewBag.UserKey = userKey;
 
@@ -62,7 +62,7 @@ namespace ToDoMVC.Controllers
 
         public IActionResult FindTasks(string SearchTarget)
         {
-            string userKey = User.FindFirst(ClaimTypes.NameIdentifier).Value.ToString();
+            string userKey = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             List<Tasks> matches = _context.Tasks.Where(x => x.OwnerId == userKey && x.Description.Contains(SearchTarget)).ToList();
             ViewBag.SearchTarget = SearchTarget;
 
