@@ -1,14 +1,12 @@
 ﻿
 @{
-    ViewData["Title"] = "ViewTasks";
+    ViewData["Title"] = "FindTasks";
 }
 
 @model List<Tasks>
-<h1>Your Tasks</h1>
-<form action="FindTasks">
-    <input type="text" name="SearchTarget" placeholder="Search Tasks" required/>
-    <input type="submit" value="Search" />
-</form>
+
+<h1>Matching Tasks For "@ViewBag.SearchTarget"</h1>
+
 <table class="table">
     <tr>
         <th>Description</th>
@@ -21,14 +19,14 @@
         <tr>
             <td>@t.Description</td>
             <td>@t.DueDate.Value.ToShortDateString()</td>
-                @if (t.IsComplete == true)
-                {
-                    <td class="finished">Yes</td>
-                }
-                else 
-                {
-                    <td class="unfinished">No</td>
-                }
+            @if (t.IsComplete == true)
+            {
+                <td class="finished">Yes</td>
+            }
+            else
+            {
+                <td class="unfinished">No</td>
+            }
             <td>
                 <form asp-action="DeleteTask" asp-route-Id="@t.Id"><input class="btn-danger" type="submit" value="Delete Task" /></form>
                 @if (t.IsComplete == false)
@@ -37,7 +35,8 @@
                         <input class="btn-success" type="submit" value="Mark Complete" />
                     </form>
                 }
-                else { 
+                else
+                {
                     <form asp-action="MarkComplete" asp-route-id="@t.Id">
                         <input class="btn-primary" type="submit" value="Mark Incomplete" />
                     </form>
@@ -49,8 +48,8 @@
 </table>
 
 <form action="AddTask" method="post">
-    <input type="text" name="Description" value="" placeholder="Description" required />
-    <input type="date" name="DueDate" required />
+    <input type="text" name="Description" value="" placeholder="Description"/>
+    <input type="date" name="DueDate" />
     <input type="hidden" name="IsComplete" value="false" />
     <input type="hidden" name="OwnerId" value="@ViewBag.UserKey" />
     <input type="submit" value="I'll gladly do this too!" />

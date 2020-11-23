@@ -18,22 +18,25 @@ namespace ToDoMVC.Controllers
         {
             _context = context;
         }
-        public IActionResult ViewTasks()
+        public IActionResult ViewTasks(string sortByDate)
         {
             string userKey = User.FindFirst(ClaimTypes.NameIdentifier).Value.ToString();
             List<Tasks> tasks = _context.Tasks.Where(x => x.OwnerId == userKey).ToList();
             ViewBag.UserKey = userKey;
+
             return View(tasks);
         }
 
         [HttpPost]
         public IActionResult AddTask(Tasks t)
         {
+
             if (ModelState.IsValid)
             {
                 _context.Tasks.Add(t);
                 _context.SaveChanges();
             }
+
             return RedirectToAction("ViewTasks");
         }
 
@@ -41,8 +44,10 @@ namespace ToDoMVC.Controllers
         {
             Tasks t = _context.Tasks.Find(Id);
             t.IsComplete = !t.IsComplete;
+
             _context.Tasks.Update(t);
             _context.SaveChanges();
+
             return RedirectToAction("ViewTasks");
         }
 
@@ -51,7 +56,17 @@ namespace ToDoMVC.Controllers
             Tasks t = _context.Tasks.Find(Id);
             _context.Tasks.Remove(t);
             _context.SaveChanges();
+
             return RedirectToAction("ViewTasks");
+        }
+
+        public IActionResult FindTasks(string SearchTarget)
+        {
+            string userKey = User.FindFirst(ClaimTypes.NameIdentifier).Value.ToString();
+            List<Tasks> matches = _context.Tasks.Where(x => x.OwnerId == userKey && x.Description.Contains(SearchTarget)).ToList();
+            ViewBag.SearchTarget = SearchTarget;
+
+            return View(matches);
         }
     }
 }
